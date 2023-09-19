@@ -19,8 +19,8 @@ jobs:
           nohup --version
           sudo apt-get update
           sudo apt-get install libpcap-dev
-          rm -rf test.html
-          rm -rf testphp.vulnweb.com.html
+          rm -rf urls.txt
+          rm -rf *.vulnweb.com.html
 
       - name: Cache Go
         id: cache-go
@@ -33,9 +33,19 @@ jobs:
         env:
           GO111MODULE: on
         run: |
-          #go install -v github.com/projectdiscovery/katana/cmd/katana@latest
-          go install -v github.com/tomnomnom/waybackurls@latest
+          #go install -v github.com/projectdiscovery/katana/cmd/katana@latest 
+          #go install -v github.com/tomnomnom/waybackurls@latest
+          go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+          go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
 
+      - name: DNS enurationing... 
+        timeout-minutes: 30
+        continue-on-error: true
+        run: |
+        
+          subfinder -dL domains.txt -config config/subfinder-config.yaml | dnsx -silent -o urls.txt
+        shell: bash
+        
       - name: KAK Scaning
         timeout-minutes: 340
         continue-on-error: true
@@ -45,13 +55,7 @@ jobs:
           mv xray_linux_amd64 xray
           
           ./xray
-          #/usr/bin/nohup ./xray webscan --plugins xss,sqldet --listen 127.0.0.1:7777  --html-output test.html &
-          for i in $(cat url.txt); do ./xray webscan --plugins  xss,sqldet,xxe,cmd-injection,upload,path-traversal,dirscan,redirect,jsonp --basic-crawler $i --html-output ${i#*//}.html ;done
-          
-          #cat urls.txt | waybackurls | tee -a url.txt
-          #for i in $(cat url.txt); do ./xray webscan --plugins  xss,sqldet,xxe,cmd-injection,upload,path-traversal,dirscan,redirect,jsonp --basic-crawler $i --html-output ${i#*//}.html ;done
-          #cat urls.txt | waybackurls | ./xray webscan --plugins  xss,sqldet,xxe,cmd-injection,upload,path-traversal,dirscan,redirect,jsonp --basic-crawler $i --html-output test.html
-            
+          for i in $(cat url.txt); do ./xray webscan --plugins  xss,sqldet,xxe,cmd-injection,upload,path-traversal,redirect,jsonp --basic-crawler $i --html-output ${i#*//}.html ;done       
 
         shell: bash
 
