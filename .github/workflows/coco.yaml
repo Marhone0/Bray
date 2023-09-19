@@ -55,7 +55,7 @@ jobs:
           mv xray_linux_amd64 xray
           
           ./xray
-          for i in $(cat urls.txt); do ./xray webscan --plugins  xss,sqldet,xxe,cmd-injection,upload,path-traversal,redirect,jsonp --basic-crawler $i --html-output ${i#*//}.html ;done       
+          for i in $(cat urls.txt); do ./xray webscan --plugins  xss,sqldet,crlf-injection,cmd-injection,upload,path-traversal,redirect,jsonp --basic-crawler $i --html-output ${i#*//}.html ;done        
 
         shell: bash
 
