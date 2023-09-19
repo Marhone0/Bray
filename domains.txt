@@ -1,4 +1,3 @@
-paypal.com
 hyperpure.com
 zdev.net
 grofer.io
