@@ -1,5 +1,2 @@
-hyperpure.com
-zdev.net
-grofer.io
-zomato.com
-runnr.in
+mi.com
+xiaomi.com
