@@ -36,12 +36,12 @@ jobs:
         env:
           GO111MODULE: on
         run: |
-          #go install -v github.com/projectdiscovery/katana/cmd/katana@latest 
+          #go install -v github.com/projectdiscovery/katana/cmd/katana@latest
           #go install -v github.com/tomnomnom/waybackurls@latest
           go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
           go install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
 
-      - name: DNS enurationing... 
+      - name: DNS enurationing...
         timeout-minutes: 30
         continue-on-error: true
         run: |
@@ -58,8 +58,7 @@ jobs:
           mv xray_linux_amd64 xray
           
           ./xray
-          for i in $(cat urls.txt); do ./xray webscan --plugins  xss,sqldet,crlf-injection,cmd-injection,upload,path-traversal,redirect,jsonp --basic-crawler $i --html-output ${i#*//}.html ;done        
-
+          for i in $(cat urls.txt); do ./xray webscan --plugins  xss,sqldet,crlf-injection,cmd-injection,upload,path-traversal,redirect,jsonp --basic-crawler $i --html-output ${i#*//}.html ;done
         shell: bash
 
       - name: Create local changes
